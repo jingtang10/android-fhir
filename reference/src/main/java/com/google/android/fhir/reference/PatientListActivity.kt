@@ -34,7 +34,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
 /** An activity representing a list of Patients. */
-class PatientListActivity : AppCompatActivity() {
+class PatientListActivity() : AppCompatActivity() {
   private lateinit var fhirEngine: FhirEngine
   private lateinit var patientListViewModel: PatientListViewModel
 
@@ -64,7 +64,7 @@ class PatientListActivity : AppCompatActivity() {
     recyclerView.adapter = adapter
 
     patientListViewModel
-      .getSearchedPatients()
+      .liveSearchedPatients
       .observe(
         this,
         {
@@ -97,32 +97,32 @@ class PatientListActivity : AppCompatActivity() {
     return true
   }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    val view: View = findViewById(R.id.app_bar)
+//  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//    val view: View = findViewById(R.id.app_bar)
+//
+//    // Handle item selection
+//    return when (item.itemId) {
+//      R.id.sync_resources -> {
+//        syncResources(view)
+//        true
+//      }
+//      R.id.load_resource -> {
+//        loadResources()
+//        true
+//      }
+//      else -> super.onOptionsItemSelected(item)
+//    }
+//  }
 
-    // Handle item selection
-    return when (item.itemId) {
-      R.id.sync_resources -> {
-        syncResources(view)
-        true
-      }
-      R.id.load_resource -> {
-        loadResources()
-        true
-      }
-      else -> super.onOptionsItemSelected(item)
-    }
-  }
+//  private fun loadResources() {
+//    val resLoadIntent = Intent(baseContext, CqlLoadActivity::class.java)
+//    startActivity(resLoadIntent)
+//  }
 
-  private fun loadResources() {
-    val resLoadIntent = Intent(baseContext, CqlLoadActivity::class.java)
-    startActivity(resLoadIntent)
-  }
-
-  private fun syncResources(view: View) {
-    Snackbar.make(view, "Getting Patients List", Snackbar.LENGTH_LONG)
-      .setAction("Action", null)
-      .show()
-    patientListViewModel.searchPatients()
-  }
+//  private fun syncResources(view: View) {
+//    Snackbar.make(view, "Getting Patients List", Snackbar.LENGTH_LONG)
+//      .setAction("Action", null)
+//      .show()
+//    patientListViewModel.searchPatients()
+//  }
 }
