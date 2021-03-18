@@ -25,6 +25,9 @@ This library is a partial implementation of the [Structured Data Capture FHIR IG
 
 The following code snippet renders a questionnaire using a FHIR questionnaire resource and an optional questionnaire response resource.
 
+
+
+
 ```
 if (savedInstanceState == null) {
     val fragment = QuestionnaireFragment()
