@@ -25,39 +25,10 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.FhirEngineProvider
+import kotlinx.coroutines.flow.Flow
 import org.hl7.fhir.r4.model.ResourceType
 
 object Sync {
-  fun basicSyncJob(context: Context): SyncJob {
-    return SyncJobImpl(context)
-  }
-
-  /**
-   * Does a one time sync based on [ResourceSearchParams]. Returns a [Result] that tells caller
-   * whether process was Success or Failure. In case of failure, caller needs to take care of the
-   * retry
-   */
-  // TODO: Check if this api is required anymore since we have SyncJob.run to do the same work.
-  suspend fun oneTimeSync(
-    context: Context,
-    fhirEngine: FhirEngine,
-    downloadManager: DownloadWorkManager
-  ): Result {
-    return FhirEngineProvider.getDataSource(context)?.let {
-      FhirSynchronizer(context, fhirEngine, it, downloadManager).synchronize()
-    }
-      ?: Result.Error(
-        listOf(
-          ResourceSyncException(
-            ResourceType.Bundle,
-            IllegalStateException(
-              "FhirEngineConfiguration.ServerConfiguration is not set. Call FhirEngineProvider.init to initialize with appropriate configuration."
-            )
-          )
-        )
-      )
-  }
-
   /**
    * Starts a one time sync based on [FhirSyncWorker]. In case of a failure, [RetryConfiguration]
    * will guide the retry mechanism. Caller can set [retryConfiguration] to [null] to stop retry.
@@ -81,14 +52,8 @@ object Sync {
   inline fun <reified W : FhirSyncWorker> periodicSync(
     context: Context,
     periodicSyncConfiguration: PeriodicSyncConfiguration
-  ) {
-
-    WorkManager.getInstance(context)
-      .enqueueUniquePeriodicWork(
-        SyncWorkType.DOWNLOAD.workerName,
-        ExistingPeriodicWorkPolicy.KEEP,
-        createPeriodicWorkRequest(periodicSyncConfiguration, W::class.java)
-      )
+  ): Flow<State> {
+    return SyncJobImpl(context).poll(periodicSyncConfiguration, W::class.java)
   }
 
   @PublishedApi

@@ -43,7 +43,6 @@ class MainActivityViewModel(application: Application, private val state: SavedSt
   val lastSyncTimestampLiveData: LiveData<String>
     get() = _lastSyncTimestampLiveData
 
-  private val job = Sync.basicSyncJob(application.applicationContext)
   private val _pollState = MutableSharedFlow<State>()
   val pollState: Flow<State>
     get() = _pollState
@@ -55,13 +54,10 @@ class MainActivityViewModel(application: Application, private val state: SavedSt
   /** Requests periodic sync. */
   fun poll() {
     viewModelScope.launch {
-      job.poll(
-          PeriodicSyncConfiguration(
-            syncConstraints = Constraints.Builder().build(),
-            repeat = RepeatInterval(interval = 15, timeUnit = TimeUnit.MINUTES)
-          ),
-          FhirPeriodicSyncWorker::class.java
-        )
+      Sync.periodicSync<FhirPeriodicSyncWorker>(getApplication<Application>().applicationContext, PeriodicSyncConfiguration(
+        syncConstraints = Constraints.Builder().build(),
+        repeat = RepeatInterval(interval = 15, timeUnit = TimeUnit.MINUTES)
+      ))
         .collect { _pollState.emit(it) }
     }
   }
