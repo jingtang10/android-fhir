@@ -44,7 +44,12 @@ android {
   kotlin { jvmToolchain(11) }
 }
 
-configurations { all { exclude(module = "xpp3") } }
+configurations {
+  all {
+    exclude(module = "xpp3")
+    forceGuava()
+  }
+}
 
 dependencies {
   androidTestImplementation(Dependencies.AndroidxTest.core)

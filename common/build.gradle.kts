@@ -1,3 +1,7 @@
+import Dependencies.forceGuava
+import Dependencies.forceHapiVersion
+import Dependencies.forceJacksonVersion
+
 plugins {
   id(Plugins.BuildPlugins.androidLib)
   id(Plugins.BuildPlugins.kotlinAndroid)
@@ -17,7 +21,14 @@ android {
   kotlin { jvmToolchain(11) }
 }
 
-configurations { all { exclude(module = "xpp3") } }
+configurations {
+  all {
+    exclude(module = "xpp3")
+    forceGuava()
+    forceHapiVersion()
+    forceJacksonVersion()
+  }
+}
 
 dependencies {
   api(Dependencies.HapiFhir.structuresR4)

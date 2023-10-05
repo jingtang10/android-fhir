@@ -1,5 +1,8 @@
 import codegen.GenerateSearchParamsTask
 import java.net.URL
+import Dependencies.forceGuava
+import Dependencies.forceHapiVersion
+  import Dependencies.forceJacksonVersion
 
 plugins {
   id(Plugins.BuildPlugins.androidLib)
@@ -84,6 +87,10 @@ configurations {
     exclude(module = "jakarta.activation-api")
     exclude(module = "javax.activation")
     exclude(module = "jakarta.xml.bind-api")
+
+    forceGuava()
+    forceHapiVersion()
+    forceJacksonVersion()
   }
 }
 

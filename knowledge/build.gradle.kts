@@ -1,4 +1,5 @@
 import java.net.URL
+import Dependencies.forceGuava
 
 plugins {
   id(Plugins.BuildPlugins.androidLib)
@@ -70,6 +71,7 @@ configurations {
   all {
     exclude(module = "xpp3")
     exclude(module = "xpp3_min")
+    forceGuava()
   }
 }
 

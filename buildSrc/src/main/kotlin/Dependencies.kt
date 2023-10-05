@@ -73,6 +73,8 @@ object Dependencies {
     const val validationR5 =
       "ca.uhn.hapi.fhir:hapi-fhir-validation-resources-r5:${Versions.hapiFhir}"
 
+    const val guavaCaching = "ca.uhn.hapi.fhir:hapi-fhir-caching-guava:${Versions.hapiFhir}"
+
     const val fhirCoreDstu2 = "ca.uhn.hapi.fhir:org.hl7.fhir.dstu2:${Versions.hapiFhirCore}"
     const val fhirCoreDstu2016 =
       "ca.uhn.hapi.fhir:org.hl7.fhir.dstu2016may:${Versions.hapiFhirCore}"
@@ -256,11 +258,11 @@ object Dependencies {
     // Hapi FHIR and HL7 Core Components are interlinked.
     // Newer versions of HapiFhir don't work on Android due to the use of Caffeine 3+
     // Wait for this to release (6.3): https://github.com/hapifhir/hapi-fhir/pull/4196
-    const val hapiFhir = "6.0.1"
+    const val hapiFhir = "6.8.0"
 
     // Newer versions don't work on Android due to Apache Commons Codec:
     // Wait for this fix: https://github.com/hapifhir/org.hl7.fhir.core/issues/1046
-    const val hapiFhirCore = "5.6.36"
+    const val hapiFhirCore = "6.8.0"
 
     const val http = "4.11.0"
 
@@ -310,6 +312,15 @@ object Dependencies {
     exclude(module = "javax.json")
     exclude(module = "jcl-over-slf4j")
     exclude(group = "org.apache.httpcomponents")
+  }
+
+  fun Configuration.forceGuava() {
+    // Removes caffeine
+    exclude(module = "hapi-fhir-caching-caffeine")
+    exclude(group = "com.github.ben-manes.caffeine", module = "caffeine")
+
+    resolutionStrategy { force(guava) }
+    resolutionStrategy { force(HapiFhir.guavaCaching) }
   }
 
   fun Configuration.forceHapiVersion() {

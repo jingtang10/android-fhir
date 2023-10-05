@@ -50,6 +50,7 @@ afterEvaluate { configureFirebaseTestLabForMicroBenchmark() }
 configurations {
   all {
     removeIncompatibleDependencies()
+    forceGrava()
     forceHapiVersion()
     forceJacksonVersion()
   }

@@ -1,3 +1,4 @@
+import Dependencies.forceGuava
 import java.net.URL
 
 plugins {
@@ -52,7 +53,12 @@ android {
 
 afterEvaluate { configureFirebaseTestLabForLibraries() }
 
-configurations { all { exclude(module = "xpp3") } }
+configurations {
+  all {
+    exclude(module = "xpp3")
+    forceGuava()
+  }
+}
 
 dependencies {
   androidTestImplementation(Dependencies.AndroidxTest.core)

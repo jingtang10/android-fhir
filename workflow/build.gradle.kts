@@ -1,3 +1,4 @@
+import Dependencies.forceGuava
 import Dependencies.forceHapiVersion
 import Dependencies.forceJacksonVersion
 import Dependencies.removeIncompatibleDependencies
@@ -78,6 +79,7 @@ afterEvaluate { configureFirebaseTestLabForLibraries() }
 configurations {
   all {
     removeIncompatibleDependencies()
+    forceGrava()
     forceHapiVersion()
     forceJacksonVersion()
   }
