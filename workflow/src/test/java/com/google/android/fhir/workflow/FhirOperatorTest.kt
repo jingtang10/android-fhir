@@ -90,6 +90,8 @@ class FhirOperatorTest {
     loadFile("/measles-immunizations/PlanDefinition-IMMZD2DTMeasles.json", ::installToIgManager)
     loadFile("/measles-immunizations/WHOCommon.json", ::installToIgManager)
     loadFile("/measles-immunizations/WHOConcepts.json", ::installToIgManager)
+    loadFile("/measles-immunizations/ValueSet-HIVstatus-values.json", ::installToIgManager)
+    loadFile("/measles-immunizations/ActivityDefinition-IMMZD2DTMeaslesMR.json", ::installToIgManager)
 
     loadFile(
       "/measles-immunizations/Patient-IMMZ-Patient-NoVaxeninfant-f.json",
@@ -101,7 +103,7 @@ class FhirOperatorTest {
     )
 
     val carePlan = fhirOperator.generateCarePlan(
-      planDefinitionId = "IMMZD2DTMeasles",
+      planDefinitionId = "PlanDefinitionIMMZD2DTMeasles",
       patientId = "IMMZ-Patient-NoVaxeninfant-f",
     )
 

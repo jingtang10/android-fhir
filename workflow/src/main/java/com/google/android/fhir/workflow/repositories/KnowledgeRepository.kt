@@ -46,12 +46,14 @@ class KnowledgeRepository(
 
     val result =
       try {
+        val list =
         knowledgeManager
           .loadResources(
             resourceType = id.resourceType,
             id = id.idPart,
           )
-          .single() as T?
+
+        list.single() as T?
       } catch (resourceNotFoundException: ResourceNotFoundException) {
         Timber.w("Found more than one value in the IgManager for the id $id")
         null as T?

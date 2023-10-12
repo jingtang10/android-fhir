@@ -1,6 +1,6 @@
 {
   "resourceType" : "PlanDefinition",
-  "id" : "IMMZD2DTMeasles",
+  "id" : "PlanDefinitionIMMZD2DTMeasles",
   "meta" : {
     "profile" : ["http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-recommendationdefinition"]
   },
@@ -14,7 +14,7 @@
   }],
   "url" : "http://fhir.org/guides/who/smart-immunization/PlanDefinition/IMMZD2DTMeasles",
   "version" : "0.1.0",
-  "name" : "IMMZD2DTMeasles",
+  "name" : "PlanDefinitionIMMZD2DTMeasles",
   "title" : "IMMZ.D2.DT.Measles",
   "type" : {
     "coding" : [{
