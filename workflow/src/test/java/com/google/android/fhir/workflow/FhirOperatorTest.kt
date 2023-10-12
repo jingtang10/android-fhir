@@ -28,7 +28,6 @@ import com.google.android.fhir.workflow.testing.FhirEngineProviderTestRule
 import com.google.common.truth.Truth.assertThat
 import java.io.File
 import java.io.InputStream
-import java.lang.IllegalArgumentException
 import java.util.TimeZone
 import kotlin.reflect.KSuspendFunction1
 import org.hl7.fhir.r4.model.Bundle
@@ -74,6 +73,41 @@ class FhirOperatorTest {
       ),
       rootDirectory,
     )
+  }
+
+  @Test
+  fun measles() = runBlockingOnWorkerThread {
+    loadFile("/measles-immunizations/FHIRCommon.json", ::installToIgManager)
+    loadFile("/measles-immunizations/FHIRHelpers.json", ::installToIgManager)
+    loadFile("/measles-immunizations/IMMZCommon.json", ::installToIgManager)
+    loadFile("/measles-immunizations/IMMZCommonIzDataElements.json", ::installToIgManager)
+    loadFile("/measles-immunizations/IMMZConcepts.json", ::installToIgManager)
+    loadFile("/measles-immunizations/IMMZConfig.json", ::installToIgManager)
+    loadFile("/measles-immunizations/IMMZD2DTMeasles.json", ::installToIgManager)
+    loadFile("/measles-immunizations/IMMZIndicatorCommon.json", ::installToIgManager)
+    loadFile("/measles-immunizations/IMMZINDMeasles.json", ::installToIgManager)
+    loadFile("/measles-immunizations/IMMZVaccineLibrary.json", ::installToIgManager)
+    loadFile("/measles-immunizations/PlanDefinition-IMMZD2DTMeasles.json", ::installToIgManager)
+    loadFile("/measles-immunizations/WHOCommon.json", ::installToIgManager)
+    loadFile("/measles-immunizations/WHOConcepts.json", ::installToIgManager)
+
+    loadFile(
+      "/measles-immunizations/Patient-IMMZ-Patient-NoVaxeninfant-f.json",
+      ::importToFhirEngine,
+    )
+    loadFile(
+      "/measles-immunizations/Observation-birthweightnormal-NoVaxeninfant-f.json",
+      ::importToFhirEngine,
+    )
+
+    val carePlan = fhirOperator.generateCarePlan(
+      planDefinitionId = "IMMZD2DTMeasles",
+      patientId = "IMMZ-Patient-NoVaxeninfant-f",
+    )
+
+    println(jsonParser.encodeResourceToString(carePlan))
+
+    assertThat(carePlan).isNotNull()
   }
 
   @Test
