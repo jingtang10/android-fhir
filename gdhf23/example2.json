@@ -1,0 +1,21 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "example1",
+  "item": [
+    {
+      "linkId": "question-1",
+      "text": "What is your first name?",
+      "type": "string"
+    },
+    {
+      "linkId": "question-2",
+      "text": "What is your last name?",
+      "type": "string"
+    },
+    {
+      "linkId": "question-3",
+      "text": "What is your date of birth?",
+      "type": "date"
+    }
+  ]
+}
