@@ -1,6 +1,6 @@
 {
   "resourceType": "Questionnaire",
-  "id": "example1",
+  "id": "example-2",
   "item": [
     {
       "linkId": "question-1",
@@ -11,6 +11,11 @@
       "linkId": "question-2",
       "text": "What is your last name?",
       "type": "string"
+    },
+    {
+      "linkId": "question-3",
+      "text": "What is your date of birth?",
+      "type": "date"
     }
   ]
 }

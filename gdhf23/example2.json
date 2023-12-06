@@ -1,21 +1,31 @@
 {
   "resourceType": "Questionnaire",
-  "id": "example1",
+  "id": "example-2",
   "item": [
     {
       "linkId": "question-1",
       "text": "What is your first name?",
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "maxLength": 10
     },
     {
       "linkId": "question-2",
       "text": "What is your last name?",
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     {
       "linkId": "question-3",
       "text": "What is your date of birth?",
-      "type": "date"
+      "type": "date",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+          "valueDate": "1905-08-23"
+        }
+      ]
     }
   ]
 }
