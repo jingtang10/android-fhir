@@ -1,0 +1,48 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "example-2",
+  "item": [
+    {
+      "linkId": "question-1",
+      "text": "What is your first name?",
+      "type": "string",
+      "required": true,
+      "maxLength": 10
+    },
+    {
+      "linkId": "question-2",
+      "text": "What is your last name?",
+      "type": "string",
+      "required": true
+    },
+    {
+      "linkId": "question-3",
+      "text": "What is your date of birth?",
+      "type": "date",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+          "valueDate": "1905-08-23"
+        }
+      ]
+    },
+    {
+      "linkId": "question-4",
+      "text": "Have you been vaccinated?",
+      "type": "boolean"
+    },
+    {
+      "linkId": "question-5",
+      "text": "Vaccination date",
+      "type": "date",
+      "enableWhen": [
+        {
+          "question": "question-4",
+          "operator": "=",
+          "answerBoolean": true
+        }
+      ]
+    }
+  ]
+}
