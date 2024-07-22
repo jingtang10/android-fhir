@@ -76,6 +76,7 @@ afterEvaluate { configureFirebaseTestLabForLibraries() }
 configurations { all { removeIncompatibleDependencies() } }
 
 dependencies {
+  androidTestImplementation(libs.androidx.room.testing)
   androidTestImplementation(libs.androidx.test.core)
   androidTestImplementation(libs.androidx.test.ext.junit.ktx)
   androidTestImplementation(libs.androidx.test.runner)

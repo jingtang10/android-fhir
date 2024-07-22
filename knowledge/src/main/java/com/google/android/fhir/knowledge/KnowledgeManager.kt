@@ -17,7 +17,6 @@
 package com.google.android.fhir.knowledge
 
 import android.content.Context
-import androidx.room.Room
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.parser.IParser
 import com.google.android.fhir.knowledge.db.KnowledgeDatabase
@@ -225,7 +224,6 @@ internal constructor(
   }
 
   companion object {
-    private const val DB_NAME = "knowledge.db"
     private const val DOWNLOADED_DATA_SUB_DIR = ".fhir_package_cache"
     private const val DEFAULT_PACKAGE_SERVER = "https://packages.fhir.org/packages/"
 
@@ -246,11 +244,7 @@ internal constructor(
       packageServer: String? = DEFAULT_PACKAGE_SERVER,
     ) =
       KnowledgeManager(
-        if (inMemory) {
-          Room.inMemoryDatabaseBuilder(context, KnowledgeDatabase::class.java).build()
-        } else {
-          Room.databaseBuilder(context, KnowledgeDatabase::class.java, DB_NAME).build()
-        },
+        KnowledgeDatabase.create(inMemory, context),
         NpmFileManager(File(downloadedNpmDir, DOWNLOADED_DATA_SUB_DIR)),
         OkHttpNpmPackageDownloader(packageServer!!),
       )
