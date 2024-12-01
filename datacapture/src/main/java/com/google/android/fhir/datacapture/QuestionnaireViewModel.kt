@@ -42,6 +42,7 @@ import com.google.android.fhir.datacapture.extensions.isHelpCode
 import com.google.android.fhir.datacapture.extensions.isHidden
 import com.google.android.fhir.datacapture.extensions.isPaginated
 import com.google.android.fhir.datacapture.extensions.isRepeatedGroup
+import com.google.android.fhir.datacapture.extensions.launchTimestamp
 import com.google.android.fhir.datacapture.extensions.localizedTextSpanned
 import com.google.android.fhir.datacapture.extensions.maxValue
 import com.google.android.fhir.datacapture.extensions.maxValueCqfCalculatedValueExpression
@@ -64,6 +65,7 @@ import com.google.android.fhir.datacapture.validation.Valid
 import com.google.android.fhir.datacapture.validation.ValidationResult
 import com.google.android.fhir.datacapture.views.QuestionTextConfiguration
 import com.google.android.fhir.datacapture.views.QuestionnaireViewItem
+import java.util.Date
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -74,6 +76,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.withIndex
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.DateTimeType
 import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.Questionnaire.QuestionnaireItemComponent
 import org.hl7.fhir.r4.model.QuestionnaireResponse
@@ -160,6 +163,8 @@ internal class QuestionnaireViewModel(application: Application, state: SavedStat
           .forEach { questionnaireResponse.addItem(it.createQuestionnaireResponseItem()) }
       }
     }
+    // Add extension for questionnaire launch time stamp
+    questionnaireResponse.launchTimestamp = DateTimeType(Date())
     questionnaireResponse.packRepeatedGroups(questionnaire)
   }
 
@@ -419,10 +424,11 @@ internal class QuestionnaireViewModel(application: Application, state: SavedStat
    * Adds empty [QuestionnaireResponseItemComponent]s to `responseItems` so that each
    * [QuestionnaireItemComponent] in `questionnaireItems` has at least one corresponding
    * [QuestionnaireResponseItemComponent]. This is because user-provided [QuestionnaireResponse]
-   * might not contain answers to unanswered or disabled questions. Note : this only applies to
-   * [QuestionnaireItemComponent]s nested under a group.
+   * might not contain answers to unanswered or disabled questions. This function should only be
+   * used for unpacked questionnaire.
    */
-  private fun addMissingResponseItems(
+  @VisibleForTesting
+  internal fun addMissingResponseItems(
     questionnaireItems: List<QuestionnaireItemComponent>,
     responseItems: MutableList<QuestionnaireResponseItemComponent>,
   ) {
@@ -446,6 +452,14 @@ internal class QuestionnaireViewModel(application: Application, state: SavedStat
             responseItems = responseItemMap[it.linkId]!!.single().item,
           )
         }
+        if (it.type == Questionnaire.QuestionnaireItemType.GROUP && it.repeats) {
+          responseItemMap[it.linkId]!!.forEach { rItem ->
+            addMissingResponseItems(
+              questionnaireItems = it.item,
+              responseItems = rItem.item,
+            )
+          }
+        }
         responseItems.addAll(responseItemMap[it.linkId]!!)
       }
     }
@@ -466,6 +480,8 @@ internal class QuestionnaireViewModel(application: Application, state: SavedStat
           )
           .map { it.copy() }
       unpackRepeatedGroups(this@QuestionnaireViewModel.questionnaire)
+      // Use authored as a submission time stamp
+      authored = Date()
     }
   }
 
@@ -593,7 +609,7 @@ internal class QuestionnaireViewModel(application: Application, state: SavedStat
           QuestionnaireState(
             items = emptyList(),
             displayMode = DisplayMode.InitMode,
-            bottomNavItems = emptyList(),
+            bottomNavItem = null,
           ),
       )
 
@@ -743,13 +759,12 @@ internal class QuestionnaireViewModel(application: Application, state: SavedStat
               QuestionnaireNavigationViewUIState.Hidden
             },
         )
-      val bottomNavigationItems =
-        listOf(QuestionnaireAdapterItem.Navigation(bottomNavigationViewState))
+      val bottomNavigation = QuestionnaireAdapterItem.Navigation(bottomNavigationViewState)
 
       return QuestionnaireState(
         items =
           if (shouldSetNavigationInLongScroll) {
-            questionnaireItemViewItems + bottomNavigationItems
+            questionnaireItemViewItems + bottomNavigation
           } else {
             questionnaireItemViewItems
           },
@@ -758,8 +773,7 @@ internal class QuestionnaireViewModel(application: Application, state: SavedStat
             showEditButton = !isReadOnly,
             showNavAsScroll = shouldSetNavigationInLongScroll,
           ),
-        bottomNavItems =
-          if (!shouldSetNavigationInLongScroll) bottomNavigationItems else emptyList(),
+        bottomNavItem = if (!shouldSetNavigationInLongScroll) bottomNavigation else null,
       )
     }
 
@@ -833,18 +847,17 @@ internal class QuestionnaireViewModel(application: Application, state: SavedStat
             QuestionnaireNavigationViewUIState.Hidden
           },
       )
-    val bottomNavigationItems =
-      listOf(QuestionnaireAdapterItem.Navigation(bottomNavigationUiViewState))
+    val bottomNavigation = QuestionnaireAdapterItem.Navigation(bottomNavigationUiViewState)
 
     return QuestionnaireState(
       items =
         if (shouldSetNavigationInLongScroll) {
-          questionnaireItemViewItems + bottomNavigationItems
+          questionnaireItemViewItems + bottomNavigation
         } else {
           questionnaireItemViewItems
         },
       displayMode = DisplayMode.EditMode(questionnairePagination, shouldSetNavigationInLongScroll),
-      bottomNavItems = if (!shouldSetNavigationInLongScroll) bottomNavigationItems else emptyList(),
+      bottomNavItem = if (!shouldSetNavigationInLongScroll) bottomNavigation else null,
     )
   }
 
@@ -1136,7 +1149,7 @@ typealias ItemToParentMap = MutableMap<QuestionnaireItemComponent, Questionnaire
 internal data class QuestionnaireState(
   val items: List<QuestionnaireAdapterItem>,
   val displayMode: DisplayMode,
-  val bottomNavItems: List<QuestionnaireAdapterItem.Navigation>,
+  val bottomNavItem: QuestionnaireAdapterItem.Navigation?,
 )
 
 internal sealed class DisplayMode {
