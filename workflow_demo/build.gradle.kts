@@ -41,6 +41,7 @@ android {
         "META-INF/LICENSE.md",
         "META-INF/NOTICE.md",
         "META-INF/INDEX.LIST",
+        "META-INF/DEPENDENCIES",
       ),
     )
   }

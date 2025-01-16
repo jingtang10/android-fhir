@@ -33,6 +33,7 @@ import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.LAST_UPDATED
 import com.google.android.fhir.search.LOCAL_LAST_UPDATED
 import com.google.android.fhir.ucumUrl
+import org.hl7.fhir.r4.fhirpath.FHIRPathEngine
 import java.math.BigDecimal
 import org.hl7.fhir.r4.model.Address
 import org.hl7.fhir.r4.model.Base
@@ -58,7 +59,6 @@ import org.hl7.fhir.r4.model.ResourceType
 import org.hl7.fhir.r4.model.StringType
 import org.hl7.fhir.r4.model.Timing
 import org.hl7.fhir.r4.model.UriType
-import org.hl7.fhir.r4.utils.FHIRPathEngine
 
 /**
  * Indexes a FHIR resource according to the

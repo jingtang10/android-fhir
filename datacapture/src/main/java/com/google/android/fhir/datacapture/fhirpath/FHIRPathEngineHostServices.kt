@@ -16,62 +16,83 @@
 
 package com.google.android.fhir.datacapture.fhirpath
 
+import org.hl7.fhir.r4.fhirpath.FHIRPathEngine
+import org.hl7.fhir.r4.fhirpath.FHIRPathUtilityClasses
+import org.hl7.fhir.r4.fhirpath.TypeDetails
 import org.hl7.fhir.r4.model.Base
-import org.hl7.fhir.r4.model.TypeDetails
 import org.hl7.fhir.r4.model.ValueSet
-import org.hl7.fhir.r4.utils.FHIRPathEngine
 
 /**
  * Resolves constants defined in the fhir path expressions beyond those defined in the specification
  */
 internal object FHIRPathEngineHostServices : FHIRPathEngine.IEvaluationContext {
   override fun resolveConstant(
+    engine: FHIRPathEngine?,
     appContext: Any?,
     name: String?,
     beforeContext: Boolean,
-  ): List<Base>? =
-    ((appContext as? Map<*, *>)?.get(name) as? Base)?.let { listOf(it) } ?: emptyList()
+    explicitConstant: Boolean,
+  ) = ((appContext as? Map<*, *>)?.get(name) as? Base)?.let { listOf(it) } ?: emptyList()
 
-  override fun resolveConstantType(appContext: Any?, name: String?): TypeDetails {
-    throw UnsupportedOperationException()
+  override fun resolveConstantType(
+    engine: FHIRPathEngine?,
+    appContext: Any?,
+    name: String?,
+    explicitConstant: Boolean,
+  ): TypeDetails {
+    TODO("Not yet implemented")
   }
 
   override fun log(argument: String?, focus: MutableList<Base>?): Boolean {
-    throw UnsupportedOperationException()
+    TODO("Not yet implemented")
   }
 
   override fun resolveFunction(
+    engine: FHIRPathEngine?,
     functionName: String?,
-  ): FHIRPathEngine.IEvaluationContext.FunctionDetails {
-    throw UnsupportedOperationException()
+  ): FHIRPathUtilityClasses.FunctionDetails {
+    TODO("Not yet implemented")
   }
 
   override fun checkFunction(
+    engine: FHIRPathEngine?,
     appContext: Any?,
     functionName: String?,
+    focus: TypeDetails?,
     parameters: MutableList<TypeDetails>?,
   ): TypeDetails {
-    throw UnsupportedOperationException()
+    TODO("Not yet implemented")
   }
 
   override fun executeFunction(
+    engine: FHIRPathEngine?,
     appContext: Any?,
     focus: MutableList<Base>?,
     functionName: String?,
     parameters: MutableList<MutableList<Base>>?,
   ): MutableList<Base> {
-    throw UnsupportedOperationException()
+    TODO("Not yet implemented")
   }
 
-  override fun resolveReference(appContext: Any?, url: String?, refContext: Base?): Base? {
-    throw UnsupportedOperationException()
+  override fun resolveReference(
+    engine: FHIRPathEngine?,
+    appContext: Any?,
+    url: String?,
+    refContext: Base?,
+  ): Base {
+    TODO("Not yet implemented")
   }
 
-  override fun conformsToProfile(appContext: Any?, item: Base?, url: String?): Boolean {
-    throw UnsupportedOperationException()
+  override fun conformsToProfile(
+    engine: FHIRPathEngine?,
+    appContext: Any?,
+    item: Base?,
+    url: String?,
+  ): Boolean {
+    TODO("Not yet implemented")
   }
 
-  override fun resolveValueSet(appContext: Any?, url: String?): ValueSet? {
-    throw UnsupportedOperationException()
+  override fun resolveValueSet(engine: FHIRPathEngine?, appContext: Any?, url: String?): ValueSet {
+    TODO("Not yet implemented")
   }
 }

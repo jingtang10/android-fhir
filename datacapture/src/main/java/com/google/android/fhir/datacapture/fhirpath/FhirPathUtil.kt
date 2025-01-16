@@ -18,13 +18,13 @@ package com.google.android.fhir.datacapture.fhirpath
 
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
+import org.hl7.fhir.r4.fhirpath.ExpressionNode
+import org.hl7.fhir.r4.fhirpath.FHIRPathEngine
 import org.hl7.fhir.r4.hapi.ctx.HapiWorkerContext
 import org.hl7.fhir.r4.model.Base
-import org.hl7.fhir.r4.model.ExpressionNode
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.QuestionnaireResponse.QuestionnaireResponseItemComponent
 import org.hl7.fhir.r4.model.Resource
-import org.hl7.fhir.r4.utils.FHIRPathEngine
 
 private val fhirPathEngine: FHIRPathEngine =
   with(FhirContext.forCached(FhirVersionEnum.R4)) {

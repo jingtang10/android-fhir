@@ -128,8 +128,8 @@ object Dependencies {
     const val fhirUcum = "1.0.3"
     const val guava = "32.1.3-android"
 
-    const val hapiFhir = "6.8.0"
-    const val hapiFhirCore = "6.0.22"
+    const val hapiFhir = "7.6.0"
+    const val hapiFhirCore = "6.4.0"
 
     const val http = "4.11.0"
 

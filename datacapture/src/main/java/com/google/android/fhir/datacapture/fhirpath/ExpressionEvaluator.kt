@@ -25,11 +25,11 @@ import com.google.android.fhir.datacapture.extensions.isReferencedBy
 import com.google.android.fhir.datacapture.extensions.isXFhirQuery
 import com.google.android.fhir.datacapture.extensions.variableExpressions
 import org.hl7.fhir.exceptions.FHIRException
+import org.hl7.fhir.r4.fhirpath.ExpressionNode
 import org.hl7.fhir.r4.model.Base
 import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent
 import org.hl7.fhir.r4.model.Expression
-import org.hl7.fhir.r4.model.ExpressionNode
 import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.Questionnaire.QuestionnaireItemComponent
 import org.hl7.fhir.r4.model.QuestionnaireResponse
